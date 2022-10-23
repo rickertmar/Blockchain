@@ -10,6 +10,7 @@ html {
 
 body {
     background-color: gray;
+    word-wrap: break-word;
 }
 
 header {
@@ -89,18 +90,67 @@ a:active {
 }
 
 
-//Blockchain
+/* Blockchain */
 
 .blockchain-wrapper {
-    margin: 30px;
-    width: 90%;
-    height: 90%;
+    margin: 100px 20px 0px 20px;
+    padding: 10px;
+    height: 500px;
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+.blockchain-wrapper h2 {
+    margin: 5px 5px;
+    text-align: center;
     background-color: white;
+    border-radius: 5px;
+}
+
+.input-modell-wrapper {
+    margin: 15px 5px 5px 5px;
+}
+
+.input-wrapper {
+    margin-right: 1%;
+    padding: 10px;
+    width: 20%;
+    height: 430px;
+    background-color: white;
+    border-radius: 5px;
+    font-size: 18px;
+    float: left;
+}
+
+.input {
+    display: block;
+    margin-bottom: 5px;
+    width: 95%;
+}
+
+input {
+    font-size: 16px;
+}
+
+.sentbtn {
+    width: 95%;
+    padding: 3px;
+}
+
+.modell-wrapper {
+    padding: 10px;
+    width: 79%;
+    height: 430px;
+    background-color: white;
+    border-radius: 5px;
+    float: left;
+    overflow: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 
 
-
-@media(max-width: 2160px) {
+@media(min-width: 1px) {
     .hamburger {
         display: block;
     }
