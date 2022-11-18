@@ -3,15 +3,14 @@ const SHA256 = require('crypto-js/sha256');
 
 /* 
 Block-Objekt mit folgenden Eigenschaften:
-- Index: hier um die Position des Blocks in der Blockchain darzustellen
+(Position eines Blocks in der Blockchain erkennbar an seiner Position im Array)
 - Timestemp/Zeitstempel: Block-Erstellung/Transaktionszeitpunkt
 - Transaction/Transaktion: Inhalt der Transaktion; Krypto-Betrag und Empfänger
 - PreHash: Hash des vorherigen Blocks
 - Hash: Hash des altuellen Blocks
 */
 class Block {
-    constructor(index, timestemp, transaction, preHash = '') {
-        this.index = index;
+    constructor(timestemp, transaction, preHash = '') {
         this.timestemp = timestemp;
         this.transaction = transaction;
         this.preHash = preHash;
@@ -22,7 +21,7 @@ class Block {
 
     // Hash mit SHA256-Funktion kalkulieren (mit importierter Libary: crypto-js)
     calcHash() {
-        return SHA256(this.index + this.preHash + this.timestemp + JSON.stringify(this.transaction) + this.nonce).toString();
+        return SHA256(this.preHash + this.timestemp + JSON.stringify(this.transaction) + this.nonce).toString();
     }
 
     mine(difficulty) {
@@ -49,7 +48,7 @@ class Blockchain {
         const heute = new Date();
         const utc = new Date().toUTCString();
         let today = utc;
-        return new Block(0, today, "Genisis-Block", "0");
+        return new Block(today, "Genisis-Block", "0");
     }
 
     // Den letzten Block der Blockchain zurückgeben (um ihn mit einem neuen Block verketten zu können)
@@ -93,9 +92,9 @@ class Blockchain {
 let test = new Blockchain();
 
 console.log("Block 1 minen...");
-test.addBlock(new Block("1", "18/11/2022", { amount: 20 }));
+test.addBlock(new Block("18/11/2022", { amount: 20 }));
 
 console.log("Block 2 minen...");
-test.addBlock(new Block("2", "19/11/2022", { amount: 13 }));
+test.addBlock(new Block("19/11/2022", { amount: 13 }));
 
 
