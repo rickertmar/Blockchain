@@ -1,6 +1,5 @@
 class Block {
-    constructor(index, timestemp, transaction, preHash = '') {
-        this.index = index;
+    constructor(timestemp, transaction, preHash = '') {
         this.timestemp = timestemp;
         this.transaction = transaction;
         this.preHash = preHash;
@@ -8,7 +7,7 @@ class Block {
     }
 
     calcHash() {
-        return SHA256(this.index + this.preHash + this.timestemp + JSON.stringify(this.transaction)).toString();
+        return SHA256(this.preHash + this.timestemp + JSON.stringify(this.transaction)).toString();
     }
 
 }
@@ -19,7 +18,7 @@ class Blockchain {
     }
 
     createGenisisBlock() {
-        return new Block(0, "07.11.2022", "Genisis-Block", "0");
+        return new Block("07.11.2022", "Genisis-Block", "0");
     }
 
     getLatestBlock() {
