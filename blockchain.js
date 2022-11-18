@@ -1,3 +1,5 @@
+const SHA256 = require('crypto-js/sha256');
+
 
 /* 
 Block-Objekt mit folgenden Eigenschaften:
