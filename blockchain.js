@@ -16,19 +16,32 @@ class Block {
         this.transaction = transaction;
         this.preHash = preHash;
         this.hash = '';
+        this.nonce = 0;
+        // "Nonce" = "number used once"; gibt vor, das der Hash-Wert mit einer bestimmten Anzahl von Nullen beginnt -> Difficulty
     }
 
     // Hash mit SHA256-Funktion kalkulieren (mit importierter Libary: crypto-js)
     calcHash() {
-        return SHA256(this.index + this.preHash + this.timestemp + JSON.stringify(this.transaction)).toString();
+        return SHA256(this.index + this.preHash + this.timestemp + JSON.stringify(this.transaction) + this.nonce).toString();
+    }
+
+    mine(difficulty) {
+        while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")) {
+            this.nonce++;
+            this.hash = this.calcHash();
+        }
+        console.log("Gemineter Block: " + this.hash);
     }
 
 }
+
+
 
 // Blockchain Objekt
 class Blockchain {
     constructor() {
         this.chain = [this.createGenisisBlock()];
+        this.difficulty = 2;
     }
 
     // Genisis-Block erstellen
@@ -47,7 +60,7 @@ class Blockchain {
     // Einen neuen Block zu der Blockchain hinzufügen
     addBlock(newBlock) {
         newBlock.preHash = newBlock.getLatestBlock().hash;
-        newBlock.hash = newBlock.calcHash();
+        newBlock.mine();
         this.chain.push(newBlock);
     }
 
@@ -78,13 +91,11 @@ class Blockchain {
 }
 
 let test = new Blockchain();
+
+console.log("Block 1 minen...");
 test.addBlock(new Block("1", "18/11/2022", { amount: 20 }));
+
+console.log("Block 2 minen...");
 test.addBlock(new Block("2", "19/11/2022", { amount: 13 }));
-
-console.log("Ist die Blockchain valide? " + test.isChainValid()); // Output: true
-
-test.chain[1].data = { amount: 1000 }; // Versuch einen bestehenden Block zu verändern
-test.chain[1].hash = test.chain[1].calcHash(); // Versuch den veränderten Block mit einem neuen (zur Änderung passenden) Hash "zu tarnen"
-console.log("Ist die Blockchain valide? " + test.isChainValid()); // Output: false
 
 
