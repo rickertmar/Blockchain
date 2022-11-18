@@ -19,7 +19,11 @@ class Blockchain {
     }
 
     createGenisisBlock() {
-        return new Block(0, "07.11.2022", "Genisis-Block", "0");
+        const heute = new Date();
+        const utc = new Date().toUTCString();
+        let today = utc;
+        return new Block(0, today, "Genisis-Block", "0");
+        alert(utc);
     }
 
     getLatestBlock() {
@@ -47,5 +51,8 @@ class Blockchain {
         }
         return true;
     }
+}
+
+class Build {
 
 }
