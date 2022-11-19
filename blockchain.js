@@ -58,8 +58,8 @@ class Blockchain {
 
     // Einen neuen Block zu der Blockchain hinzufügen
     addBlock(newBlock) {
-        newBlock.preHash = newBlock.getLatestBlock().hash;
-        newBlock.mine();
+        newBlock.preHash = this.getLatestBlock().hash;
+        newBlock.mine(this.difficulty);
         this.chain.push(newBlock);
     }
 
@@ -91,10 +91,30 @@ class Blockchain {
 
 let test = new Blockchain();
 
-console.log("Block 1 minen...");
+/* console.log("Block 1 minen...");
 test.addBlock(new Block("18/11/2022", { amount: 20 }));
 
 console.log("Block 2 minen...");
 test.addBlock(new Block("19/11/2022", { amount: 13 }));
+ */
 
+// Anzeige in HTML
+const recipient = document.getElementById('recipient');
+const amount = document.getElementById('amount');
+const sentbtn = document.getElementById('sentbtn');
 
+sentbtn.onclick = function () {
+    const pRecipient = recipient.value;
+    const pAmount = amount.value;
+
+    if (pRecipient && pAmount) {
+        let testchain = new Blockchain();
+        testchain.addBlock(new Block(today, { amount: pAmount, recipient: pRecipient }));
+    }
+}
+
+for (let i = 0; i < testchain.length; i++) {
+    const outTransaction = testchain[i].transaction;
+
+    modellOutput.innerHTML += `<div class="block"><h3>Transaktions-Details:</h3><br />${outTransaction}</div>`;
+}
