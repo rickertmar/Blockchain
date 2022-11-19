@@ -15,19 +15,32 @@ class Block {
         this.transaction = transaction;
         this.preHash = preHash;
         this.hash = '';
+        this.nonce = 0;
+        // "Nonce" = "number used once"; gibt vor, das der Hash-Wert mit einer bestimmten Anzahl von Nullen beginnt -> Difficulty
     }
 
     // Hash mit SHA256-Funktion kalkulieren (mit importierter Libary: crypto-js)
     calcHash() {
-        return SHA256(this.preHash + this.timestemp + JSON.stringify(this.transaction)).toString();
+        return SHA256(this.preHash + this.timestemp + JSON.stringify(this.transaction) + this.nonce).toString();
+    }
+
+    mine(difficulty) {
+        while (this.hash.substring(0, difficulty) !== Array(difficulty + 1).join("0")) {
+            this.nonce++;
+            this.hash = this.calcHash();
+        }
+        console.log("Gemineter Block: " + this.hash);
     }
 
 }
+
+
 
 // Blockchain Objekt
 class Blockchain {
     constructor() {
         this.chain = [this.createGenisisBlock()];
+        this.difficulty = 2;
     }
 
     // Genisis-Block erstellen
@@ -46,7 +59,7 @@ class Blockchain {
     // Einen neuen Block zu der Blockchain hinzufügen
     addBlock(newBlock) {
         newBlock.preHash = this.getLatestBlock().hash;
-        newBlock.hash = newBlock.calcHash();
+        newBlock.mine(this.difficulty);
         this.chain.push(newBlock);
     }
 
@@ -82,10 +95,33 @@ test.addBlock(new Block("19/11/2022", { amount: 13 }));
 
 console.log(JSON.stringify(test, null, 4));
 
-console.log("Ist die Blockchain valide? " + test.isChainValid()); // Output: true
+/* console.log("Block 1 minen...");
+test.addBlock(new Block("18/11/2022", { amount: 20 }));
 
 test.chain[1].transaction = { amount: 1000 }; // Versuch einen bestehenden Block zu verändern
 test.chain[1].hash = test.chain[1].calcHash(); // Versuch den veränderten Block mit einem neuen (zur Änderung passenden) Hash "zu tarnen"
 console.log("Ist die Blockchain valide? " + test.isChainValid()); // Output: false
+console.log("Block 2 minen...");
+test.addBlock(new Block("19/11/2022", { amount: 13 }));
+ */
 
+// Anzeige in HTML
+const recipient = document.getElementById('recipient');
+const amount = document.getElementById('amount');
+const sentbtn = document.getElementById('sentbtn');
 
+sentbtn.onclick = function () {
+    const pRecipient = recipient.value;
+    const pAmount = amount.value;
+
+    if (pRecipient && pAmount) {
+        let testchain = new Blockchain();
+        testchain.addBlock(new Block(today, { amount: pAmount, recipient: pRecipient }));
+    }
+}
+
+for (let i = 0; i < testchain.length; i++) {
+    const outTransaction = testchain[i].transaction;
+
+    modellOutput.innerHTML += `<div class="block"><h3>Transaktions-Details:</h3><br />${outTransaction}</div>`;
+}
