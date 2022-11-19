@@ -32,14 +32,10 @@ class Blockchain {
 
     // Genisis-Block erstellen
     createGenisisBlock() {
-<<<<<<< HEAD
-        return new Block("07.11.2022", "Genisis-Block", "0");
-=======
         const heute = new Date();
         const utc = new Date().toUTCString();
         let today = utc;
         return new Block(today, "Genisis-Block", "0");
->>>>>>> blockchainToHTML
     }
 
     // Den letzten Block der Blockchain zurückgeben (um ihn mit einem neuen Block verketten zu können)
