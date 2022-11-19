@@ -32,7 +32,7 @@ class Blockchain {
 
     // Genisis-Block erstellen
     createGenisisBlock() {
-        const heute = new Date();
+        //const heute = new Date();
         const utc = new Date().toUTCString();
         let today = utc;
         return new Block(today, "Genisis-Block", "0");
@@ -45,7 +45,7 @@ class Blockchain {
 
     // Einen neuen Block zu der Blockchain hinzufügen
     addBlock(newBlock) {
-        newBlock.preHash = newBlock.getLatestBlock().hash;
+        newBlock.preHash = this.getLatestBlock().hash;
         newBlock.hash = newBlock.calcHash();
         this.chain.push(newBlock);
     }
@@ -80,9 +80,11 @@ let test = new Blockchain();
 test.addBlock(new Block("18/11/2022", { amount: 20 }));
 test.addBlock(new Block("19/11/2022", { amount: 13 }));
 
+console.log(JSON.stringify(test, null, 4));
+
 console.log("Ist die Blockchain valide? " + test.isChainValid()); // Output: true
 
-test.chain[1].data = { amount: 1000 }; // Versuch einen bestehenden Block zu verändern
+test.chain[1].transaction = { amount: 1000 }; // Versuch einen bestehenden Block zu verändern
 test.chain[1].hash = test.chain[1].calcHash(); // Versuch den veränderten Block mit einem neuen (zur Änderung passenden) Hash "zu tarnen"
 console.log("Ist die Blockchain valide? " + test.isChainValid()); // Output: false
 
